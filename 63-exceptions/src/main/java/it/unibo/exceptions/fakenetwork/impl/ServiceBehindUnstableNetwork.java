@@ -2,6 +2,7 @@ package it.unibo.exceptions.fakenetwork.impl;
 
 import it.unibo.exceptions.arithmetic.ArithmeticService;
 import it.unibo.exceptions.fakenetwork.api.NetworkComponent;
+import it.unibo.exceptions.fakenetwork.netExeptions.NetworkException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,13 +24,18 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
 
     /**
      * @param failProbability the probability that a network communication fails
-     * @param randomSeed random generator seed for reproducibility
+     * @param randomSeed      random generator seed for reproducibility
      */
     public ServiceBehindUnstableNetwork(final double failProbability, final int randomSeed) {
         /*
          * The probability should be in [0, 1[!
          */
-        this.failProbability = failProbability;
+        if (failProbability >= 0.0 && failProbability < 1.0) {
+            this.failProbability = failProbability;
+        } else {
+            final String msg = "The probability should be in [0, 1[!";
+            throw new java.lang.IllegalArgumentException(msg);
+        }
         randomGenerator = new Random(randomSeed);
     }
 
@@ -55,8 +61,8 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
             commandQueue.add(data);
         } else {
             final var message = data + " is not a valid keyword (allowed: " + KEYWORDS + "), nor is a number";
-            System.out.println(message);
-            commandQueue.clear();
+            throw new NetworkException(message);
+            //commandQueue.clear();
             /*
              * This method, in this point, should throw an IllegalStateException.
              * Its cause, however, is the previous NumberFormatException.
@@ -79,7 +85,11 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
 
     private void accessTheNetwork(final String message) throws IOException {
         if (randomGenerator.nextDouble() < failProbability) {
-            throw new IOException("Generic I/O error");
+            if(message!=null){
+                throw new NetworkException(message);
+            }else{
+                throw new NetworkException();
+            }
         }
     }
 

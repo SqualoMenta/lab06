@@ -22,7 +22,7 @@ Modify `ServiceBehindUnstableNetwork.accessTheNetwork()`
 in such a way that it throws the new Exception.
 Notice that the blocks that used to catch `IOException` still work.
 
-### Check the arguments' correctness and preserve the stacktrace on rethrows
+### Check the arguments' correctness and preserve the stacktrace on rethrows //non ho capito
 
 Modify `ServiceBehindUnstableNetwork.sendData` in such a way that,
 instead of printing, throws an IllegalArgumentException with the same message.
