@@ -120,5 +120,6 @@ public final class UseListsAndMaps {
         for (long popolazione : cose.values()) {
             popolazioneMondiale += popolazione;
         }
+        System.out.println(popolazioneMondiale);
     }
 }
